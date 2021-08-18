@@ -1,0 +1,35 @@
+specVersion: 0.0.2
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Marketplace
+    network: mainnet
+    source:
+      address: "2d9d885b2f74e67a13eaeb2e70575fc7123cae12"
+      abi: Marketplace
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - OrderCreated
+        - OrderSuccessful
+        - OrderCancelled
+        - ChangedPublicationFee
+        - ChangedOwnerCutPerMillion
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+          handler: handleOrderSuccessful
+        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+          handler: handleOrderCancelled
+        - event: ChangedPublicationFee(uint256)
+          handler: handleChangedPublicationFee
+        - event: ChangedOwnerCutPerMillion(uint256)
+          handler: handleChangedOwnerCutPerMillion
+      file: ./src/mapping.ts
