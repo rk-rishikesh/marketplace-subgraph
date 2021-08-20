@@ -1,52 +1,13 @@
-type NFTData @entity {
-  id: ID!
-  _tokenId: BigInt!
-  nftAddress: String!
-  _by: Account! # address
-  tokenURI: String
-
-  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. Should only ever be ONE open order. all others must be cancelled or sold
-  activeOrder: Order
-
-  name: String
-  image: String
-
-  createdAt: BigInt!
-  updatedAt: BigInt!
-
-  # search indexes
-  searchOrderStatus: OrderStatus
-  searchOrderPrice: BigInt
-  searchOrderExpiresAt: BigInt
-  searchOrderCreatedAt: BigInt
-
-  searchText: String
-}
-
 type Order @entity {
   id: ID!
-  nft: NFTData
   nftAddress: String!
   tokenId: BigInt!
   txHash: Bytes!
   owner: Bytes!
   buyer: Bytes
   price: BigInt!
-  status: OrderStatus!
   blockNumber: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
   updatedAt: BigInt!
-}
-
-enum OrderStatus @entity {
-  open
-  sold
-  cancelled
-}
-
-type Account @entity {
-  id: ID! # ETH addr
-  address: Bytes!
-  nfts: [NFTData!] @derivedFrom(field: "_by")
 }

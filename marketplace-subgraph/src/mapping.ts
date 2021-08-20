@@ -25,12 +25,11 @@ export function handleOrderCreated(event: OrderCreated): void {
   entity.txHash = event.transaction.hash
   entity.owner = event.params.seller
   entity.price = event.params.priceInWei
-  entity.status = 'open'
   entity.expiresAt = event.params.expiresAt
   entity.blockNumber = event.block.number
   entity.createdAt = event.block.timestamp
   entity.updatedAt = event.block.timestamp
-  // Entities can be written to the store with `.save()`
+
   entity.save()
 }
 
