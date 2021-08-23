@@ -1,13 +1,58 @@
+type Count @entity {
+  id: ID!
+  orderTotal: Int!
+  started: Int!
+}
+
 type Order @entity {
   id: ID!
-  nftAddress: String!
+  nft: NFTData
+  nftAddress: Bytes!
   tokenId: BigInt!
   txHash: Bytes!
   owner: Bytes!
   buyer: Bytes
   price: BigInt!
+  status: OrderStatus!
   blockNumber: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
   updatedAt: BigInt!
+}
+
+type NFTData @entity {
+  id: ID!
+  tokenId: BigInt!
+  nftAddress: String!
+  owner: Account!
+  tokenURI: String
+
+  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. Should only ever be ONE open order. all others must be cancelled or sold
+  activeOrder: Order
+
+  name: String
+  image: String
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+
+  # search indexes
+  searchOrderStatus: OrderStatus
+  searchOrderPrice: BigInt
+  searchOrderExpiresAt: BigInt
+  searchOrderCreatedAt: BigInt
+
+  searchText: String
+}
+
+type Account @entity {
+  id: ID! # ETH addr
+  address: Bytes!
+  nfts: [NFTData!] @derivedFrom(field: "owner")
+}
+
+enum OrderStatus @entity {
+  open
+  sold
+  cancelled
 }

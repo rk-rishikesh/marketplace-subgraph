@@ -19,7 +19,7 @@ export function handleOrderCreated(event: OrderCreated): void {
   if (entity == null) {
     entity = new Order(event.params.id.toHex())
   }
-  //event.transaction.from.toHex()
+
   entity.tokenId = event.params.assetId
   entity.nftAddress = event.address.toHexString()
   entity.txHash = event.transaction.hash
@@ -33,51 +33,7 @@ export function handleOrderCreated(event: OrderCreated): void {
   entity.save()
 }
 
-export function handleOrderSuccessful(event: OrderSuccessful): void {
+export function handleOrderSuccessful(event: OrderSuccessful): void {}
 
-  let orderId = event.params.id.toHex()
+export function handleOrderCancelled(event: OrderCancelled): void {}
 
-  //let nft = NFT.load(nftId)
-  let order = Order.load(orderId)
-
-  if (order == null) {
-    order = new Order(event.params.id.toHex())
-  }
-
-  //order.status = status.SOLD
-  order.buyer = event.params.buyer
-  order.price = event.params.totalPrice
-  order.blockNumber = event.block.number
-  order.updatedAt = event.block.timestamp
-  order.save()
-
-  //nft.owner = event.params.buyer.toHex()
-  //nft.updatedAt = event.block.timestamp
-  //nft = updateNFTOrderProperties(nft!, order!)
-  //nft.save()
-}
-
-export function handleOrderCancelled(event: OrderCancelled): void {
-
-  let orderId = event.params.id.toHex()
-
-
-  let order = Order.load(orderId)
-
-  if (order == null) {
-    order = new Order(event.params.id.toHex())
-  }
-
-    order.blockNumber = event.block.number
-    order.updatedAt = event.block.timestamp
-    order.save()
-
-}
-
-export function handleChangedPublicationFee(
-  event: ChangedPublicationFee
-): void {}
-
-export function handleChangedOwnerCutPerMillion(
-  event: ChangedOwnerCutPerMillion
-): void {}
